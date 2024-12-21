@@ -1,0 +1,33 @@
+---
+- name: Install and Configure HTTPD Web Server
+  hosts: webservers
+  become: true
+
+  vars:
+    index_file_content: |
+      <html>
+      <head>
+        <title>Welcome to Ansible HTTPD</title>
+      </head>
+      <body>
+        <h1>Deployed with Ansible!</h1>
+      </body>
+      </html>
+
+  tasks:
+    - name: Install HTTPD package
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start and enable HTTPD service
+      service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Create the index.html file
+      copy:
+        dest: /var/www/html/index.html
+        content: "{{ index_file_content }}"
+
